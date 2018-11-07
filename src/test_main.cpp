@@ -10,9 +10,9 @@ TEST(networkTest, initialize) {
     net.resize(100);
     EXPECT_EQ(net.size(), 100);
     std::vector<double> vals = net.sorted_values();
-   EXPECT_TRUE(std::is_sorted(vals.begin(), vals.end(), std::greater<double>()));
+    EXPECT_TRUE(std::is_sorted(vals.begin(), vals.end(), std::greater<double>()));
     double var = 0;
-    for (auto I : vals) 
+    for (auto I : vals) var += I*I;
     EXPECT_GT(var, 10);
 }
 
@@ -29,8 +29,10 @@ TEST(networkTest, connect) {
     std::vector<size_t> ngb = net.neighbors(9);
     EXPECT_EQ(ngb.size(), 3);
     EXPECT_TRUE(ngb[0]==10 && ngb[1]==8 && ngb[2]==1);
-    size_t numlink = net.random_connect(2);
-    EXPECT_NEAR(numlink, 200, 5);
+    double numlink = 0;
+    for (int rep=0; rep<100; rep++) 
+      numlink += 0.01*net.random_connect(2);
+    EXPECT_NEAR(numlink, 200, 15);
 }
 
 TEST(networkTest, values) {
@@ -44,5 +46,5 @@ TEST(networkTest, values) {
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+return RUN_ALL_TESTS();
 }
